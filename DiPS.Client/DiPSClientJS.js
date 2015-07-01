@@ -11,7 +11,7 @@
             EventName: eventName,
             ClientId: diPSClient.ClientId,
             MessageType: 'publish',
-            EventParameter: JSON.stringify(eventParameter)
+            EventParameter: JSON.stringify(payLoad)
         };
         diPSClient.waitForSocketReady(JSON.stringify(msg));
     },
