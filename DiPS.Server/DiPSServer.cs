@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebSocketSharp.Server;
+using DiPSWebSockets.Server;
 
 namespace DiPS.Server
 {
@@ -43,7 +43,7 @@ namespace DiPS.Server
 
 
 
-        protected override void OnMessage(WebSocketSharp.MessageEventArgs e)
+        protected override void OnMessage(DiPSWebSockets.MessageEventArgs e)
         {
             base.OnMessage(e);
             //The clientId must be sent by the client
@@ -85,7 +85,7 @@ namespace DiPS.Server
             
         }
 
-        protected override void OnClose(WebSocketSharp.CloseEventArgs e)
+        protected override void OnClose(DiPSWebSockets.CloseEventArgs e)
         {
             var clientId = Context.QueryString["clientid"];
             //remove all subscriptions
@@ -94,10 +94,11 @@ namespace DiPS.Server
             base.OnClose(e);
         }
 
-        protected override void OnError(WebSocketSharp.ErrorEventArgs e)
+        protected override void OnError(DiPSWebSockets.ErrorEventArgs e)
         {
             //for now do nothing
             //TODO: Check for common errors and check if we remove the clientid
+            
             
             base.OnError(e);
         }

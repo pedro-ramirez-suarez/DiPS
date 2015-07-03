@@ -22,9 +22,9 @@ namespace DiPS
 
             Console.WriteLine("DiPS Server");
 
-            Console.WriteLine("Listening on port {0}, press ESC key to exit", ConfigurationManager.AppSettings["port"]);
+            Console.WriteLine("Listening on port {0}, type 'quit' to stop the service", ConfigurationManager.AppSettings["port"]);
             while (true)
-                if (Console.ReadKey().Key == ConsoleKey.Escape)
+                if (Console.ReadLine().ToLower() == "quit")
                 {
                     //DiPSService.ServiceStop();
                     break;

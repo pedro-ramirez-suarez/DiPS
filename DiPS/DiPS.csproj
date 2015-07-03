@@ -9,9 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DiPS</RootNamespace>
     <AssemblyName>DiPS</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -22,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,7 +40,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
@@ -47,15 +49,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="websocket-sharp">
-      <HintPath>..\packages\WebSocketSharp.1.0.3-rc8\lib\websocket-sharp.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiPSService.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DiPSServiceInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
@@ -63,25 +60,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DiPS.Common\DiPS.Common.csproj">
-      <Project>{45af36d3-089a-4207-88b8-caf2381062c5}</Project>
+      <Project>{45AF36D3-089A-4207-88B8-CAF2381062C5}</Project>
       <Name>DiPS.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\DiPS.Server\DiPS.Server.csproj">
-      <Project>{2ccf0264-7aae-43e8-9749-7f5f48282406}</Project>
+      <Project>{2CCF0264-7AAE-43E8-9749-7F5F48282406}</Project>
       <Name>DiPS.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DiPSWebSockets\DiPSWebSockets.csproj">
+      <Project>{B357BAC7-529E-4D81-A0D2-71041B19C8DE}</Project>
+      <Name>DiPSWebSockets</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="DiPSLogo.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DiPSServiceInstaller.resx">
-      <DependentUpon>DiPSServiceInstaller.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
