@@ -84,7 +84,8 @@
         var socket = diPSClient.websocket;
         setTimeout(
         function () {
-            if (socket.readyState === 1) {
+
+            if (socket != undefined && socket != null && socket.readyState === 1) {
                 socket.send(message);
                 return;
 
