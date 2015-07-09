@@ -6,13 +6,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DiPSWebSockets.Server;
+using System.Threading;
 
 namespace DiPS.Server
 {
     public class DiPSServer : WebSocketBehavior
     {
-
+        /// <summary>
+        /// The sockets server
+        /// </summary>
         static WebSocketServer dipsServer;
+
+        /// <summary>
+        /// A collection of subscribers to events
+        /// </summary>
+        static Dictionary<string, List<string>> _EventsAndSubscribers = new Dictionary<string, List<string>>();
+
+        /// <summary>
+        /// Used to send messages in other thread async
+        /// </summary>
+        public class AsyncMessage
+        {
+            public DiPSEvent Event { get; set; }
+            public string SessionId { get; set; }
+        }
         public static void Start(string url, int port)
         {
             try
@@ -39,10 +56,12 @@ namespace DiPS.Server
             }
         }
 
-        static  Dictionary<string, List<string>> _EventsAndSubscribers = new Dictionary<string, List<string>>();
+        
 
 
-
+        /// <summary>
+        /// Process messages received and takes proper action, all messages are json objects as string
+        /// </summary>
         protected override void OnMessage(DiPSWebSockets.MessageEventArgs e)
         {
             base.OnMessage(e);
@@ -63,17 +82,29 @@ namespace DiPS.Server
                         _EventsAndSubscribers[dEvent.EventName].Remove(dEvent.ClientId);
                     break;
                 case MessageType.Publish:
+                    if (!_EventsAndSubscribers.ContainsKey(dEvent.EventName))
+                        return;
                     var clients = _EventsAndSubscribers[dEvent.EventName];
                     clients.ForEach((c) => {
                         //match the session id with the clientid
                         var session = Sessions.Sessions.FirstOrDefault(s => s.Context.QueryString["clientid"] == c);
                         //if the session was found, send the message
                         dEvent.MessageType = MessageType.EventFired;
-                        if(session!= null) //maybe send it in another thread?
-                            Sessions.SendToAsync(JsonConvert.SerializeObject(dEvent), session.ID, (complecte) => { /*Do nothing*/ });
+                        if (session != null) //send it in another thread, this is helpful when we have many subscribers
+                            ThreadPool.QueueUserWorkItem(new WaitCallback(SendInThreadAsync), new AsyncMessage { Event = dEvent, SessionId = session.ID });
+                                    
                     });
                     break;
             }
+        }
+
+        /// <summary>
+        /// Used to send the message in another thread async
+        /// </summary>
+        private void SendInThreadAsync(object toSend)
+        {
+            AsyncMessage _event = toSend as AsyncMessage;
+            Sessions.SendToAsync(JsonConvert.SerializeObject(_event.Event), _event.SessionId, (complete) => {  });
         }
 
         /// <summary>
@@ -85,21 +116,20 @@ namespace DiPS.Server
             
         }
 
+        /// <summary>
+        /// We dont want to remove the subscriptions on close, because the client may reconnect, and when it does, it uses the same clientid
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnClose(DiPSWebSockets.CloseEventArgs e)
         {
-            var clientId = Context.QueryString["clientid"];
-            //remove all subscriptions
-            foreach (var k in _EventsAndSubscribers.Keys)
-                _EventsAndSubscribers[k].Remove(clientId);
             base.OnClose(e);
         }
 
+        /// <summary>
+        /// Do nothing for now, TODO: log the errors
+        /// </summary>
         protected override void OnError(DiPSWebSockets.ErrorEventArgs e)
         {
-            //for now do nothing
-            //TODO: Check for common errors and check if we remove the clientid
-            
-            
             base.OnError(e);
         }
     }

@@ -11,6 +11,9 @@ namespace DiPS
     #region Nested classes to support running as service
     
 
+    /// <summary>
+    /// Right now the service run as a background app, but this is preparation to expose it as a normal Windows Service
+    /// </summary>
     public class DiPSService : ServiceBase
     {
         public const string Service_Name = "DiPS Service";
@@ -29,7 +32,9 @@ namespace DiPS
             DiPSService.ServiceStop();
         }
 
-
+        /// <summary>
+        /// The service will start on the url and port specified on the .config file
+        /// </summary>
         public  static void ServiceStart()
         {
             int port = int.Parse(ConfigurationManager.AppSettings["port"]);
