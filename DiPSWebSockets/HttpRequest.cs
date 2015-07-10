@@ -61,7 +61,7 @@ namespace DiPSWebSockets
     internal HttpRequest (string method, string uri)
       : this (method, uri, HttpVersion.Version11, new NameValueCollection ())
     {
-      Headers["User-Agent"] = "websocket-sharp/1.0";
+      Headers["User-Agent"] = "DiPS Service/1.0";
     }
 
     #endregion

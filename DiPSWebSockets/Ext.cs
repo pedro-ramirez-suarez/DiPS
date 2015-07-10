@@ -59,7 +59,7 @@ using  DiPSWebSockets.Server;
 namespace DiPSWebSockets
 {
   /// <summary>
-  /// Provides a set of static methods for websocket-sharp.
+  /// Provides a set of static methods for websockets
   /// </summary>
   public static class Ext
   {

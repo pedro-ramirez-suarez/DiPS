@@ -508,7 +508,7 @@ namespace DiPSWebSockets.Net
       }
 
       if (headers["Server"] == null)
-        headers.InternalSet ("Server", "websocket-sharp/1.0", true);
+          headers.InternalSet("Server", "DiPS Service/1.00", true);
 
       var prov = CultureInfo.InvariantCulture;
       if (headers["Date"] == null)
