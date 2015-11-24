@@ -82,21 +82,17 @@
     },
     waitForSocketReady: function (message) { //this is only to hold a call to the websocket if is not ready to be used
         var socket = diPSClient.websocket;
-        setTimeout(
-        function () {
-
-            if (socket != undefined && socket != null && socket.readyState === 1) {
-                socket.send(message);
-                return;
-
-            } else {
-                diPSClient.waitForSocketReady(message);
-            }
-
-        }, 5); // wait 5 milisecond for the connection...
+        if (socket != undefined && socket != null && socket.readyState === 1) {
+            socket.send(message);
+            return;
+        } else {
+            setTimeout(
+                function () {
+                    diPSClient.waitForSocketReady(message);
+                }, 5); // wait 5 milisecond for the connection...    
+        }
     }
 };
-
 
 
 
