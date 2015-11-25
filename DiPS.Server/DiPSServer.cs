@@ -64,37 +64,46 @@ namespace DiPS.Server
         /// </summary>
         protected override void OnMessage(DiPSWebSockets.MessageEventArgs e)
         {
-            base.OnMessage(e);
-            //The clientId must be sent by the client
-            var dEvent = JsonConvert.DeserializeObject<DiPSEvent>(e.Data);
-            var clientId = Context.QueryString["clientid"];
-            
-            switch (dEvent.MessageType)
+            try
             {
-                case MessageType.Subscribe:
-                    if (!_EventsAndSubscribers.ContainsKey(dEvent.EventName))
-                        _EventsAndSubscribers.Add(dEvent.EventName, new List<string>());
-                    if (!_EventsAndSubscribers[dEvent.EventName].Contains(dEvent.ClientId))
-                        _EventsAndSubscribers[dEvent.EventName].Add(dEvent.ClientId);
-                    break;
-                case MessageType.Unsubscribe:
-                    if (_EventsAndSubscribers.ContainsKey(dEvent.EventName) && _EventsAndSubscribers[dEvent.EventName].Contains(dEvent.ClientId))
-                        _EventsAndSubscribers[dEvent.EventName].Remove(dEvent.ClientId);
-                    break;
-                case MessageType.Publish:
-                    if (!_EventsAndSubscribers.ContainsKey(dEvent.EventName))
-                        return;
-                    var clients = _EventsAndSubscribers[dEvent.EventName];
-                    clients.ForEach((c) => {
-                        //match the session id with the clientid
-                        var session = Sessions.Sessions.FirstOrDefault(s => s.Context.QueryString["clientid"] == c);
-                        //if the session was found, send the message
-                        dEvent.MessageType = MessageType.EventFired;
-                        if (session != null) //send it in another thread, this is helpful when we have many subscribers
-                            ThreadPool.QueueUserWorkItem(new WaitCallback(SendInThreadAsync), new AsyncMessage { Event = dEvent, SessionId = session.ID });
-                                    
-                    });
-                    break;
+
+                base.OnMessage(e);
+                //The clientId must be sent by the client
+                var dEvent = JsonConvert.DeserializeObject<DiPSEvent>(e.Data);
+                var clientId = Context.QueryString["clientid"];
+
+                switch (dEvent.MessageType)
+                {
+                    case MessageType.Subscribe:
+                        if (!_EventsAndSubscribers.ContainsKey(dEvent.EventName))
+                            _EventsAndSubscribers.Add(dEvent.EventName, new List<string>());
+                        if (!_EventsAndSubscribers[dEvent.EventName].Contains(dEvent.ClientId))
+                            _EventsAndSubscribers[dEvent.EventName].Add(dEvent.ClientId);
+                        break;
+                    case MessageType.Unsubscribe:
+                        if (_EventsAndSubscribers.ContainsKey(dEvent.EventName) && _EventsAndSubscribers[dEvent.EventName].Contains(dEvent.ClientId))
+                            _EventsAndSubscribers[dEvent.EventName].Remove(dEvent.ClientId);
+                        break;
+                    case MessageType.Publish:
+                        if (!_EventsAndSubscribers.ContainsKey(dEvent.EventName))
+                            return;
+                        var clients = _EventsAndSubscribers[dEvent.EventName];
+                        clients.ForEach((c) =>
+                        {
+                            //match the session id with the clientid
+                            var session = Sessions.Sessions.FirstOrDefault(s => s.Context.QueryString["clientid"] == c);
+                            //if the session was found, send the message
+                            dEvent.MessageType = MessageType.EventFired;
+                            if (session != null) //send it in another thread, this is helpful when we have many subscribers
+                                ThreadPool.QueueUserWorkItem(new WaitCallback(SendInThreadAsync), new AsyncMessage { Event = dEvent, SessionId = session.ID });
+
+                        });
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
 
