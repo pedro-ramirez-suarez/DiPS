@@ -1,0 +1,41 @@
+﻿<Properties StartupConfiguration="{92A69127-0973-4D99-BC1B-62F564C6E1C2}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="DiPSBackEndApplication/Controller/DiPSController.cs">
+    <Files>
+      <File FileName="DiPS/Program.cs" Line="21" Column="35" />
+      <File FileName="DiPS/DiPSService.cs" Line="42" Column="38" />
+      <File FileName="DiPS.Server/DiPSServer.cs" Line="13" Column="36" />
+      <File FileName="DiPSWebSockets/Server/WebSocketBehavior.cs" Line="43" Column="25" />
+      <File FileName="DiPSWebSockets/Server/WebSocketServer.cs" Line="1" Column="1" />
+      <File FileName="DiPS.Client/DiPSClient.cs" Line="1" Column="1" />
+      <File FileName="DiPS.Client/DiPSClientJS.js" Line="1" Column="1" />
+      <File FileName="DiPSBackEndApplication/Application/DipsBackEnd.cs" Line="1" Column="1" />
+      <File FileName="DiPSBackEndApplication/Controller/DiPSController.cs" Line="18" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="DiPS" expanded="True">
+            <Node name="DiPS" expanded="True" />
+            <Node name="DiPS.Server" expanded="True" />
+            <Node name="DiPSBackEndApplication" expanded="True">
+              <Node name="Application" expanded="True" />
+              <Node name="Controller" expanded="True">
+                <Node name="DiPSController.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.DiPS PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>
